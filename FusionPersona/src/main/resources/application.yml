@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password:
+    url: jdbc:mysql://localhost:3306/persona3schema
+  jpa:
+    generate-ddl: 'true'
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      ddl-auto: update
+logging.level.root: DEBUG
