@@ -30,7 +30,6 @@ public class FusionPersonaDaoImpl implements FusionPersonaDao {
                     .fusionR(fusionPersona.getFusionRDto())
                     .build());
         });
-
         fusionPersonaRepository.saveAll(fusionPersonaList);
     }
 }

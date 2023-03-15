@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Tag(name = "Persona's API", description = "Persona CRUD API")
-@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST})
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE})
 @RestController
 @RequestMapping(value = "/api/persona")
 public class PersonaController {
@@ -34,7 +34,6 @@ public class PersonaController {
     @PostMapping(value = "create")
     public String createPersona(@RequestBody CPersonaDto cPersonaDto) {
         personaServices.createPersona(cPersonaDto);
-
         return "PERSONA CREATED";
     }
 
@@ -49,7 +48,6 @@ public class PersonaController {
     public List<GPersonaDto> findAllPersonas() {
         List<GPersonaDto> personaDtoList = null;
         personaDtoList = personaServices.findAllPersonas();
-
         return personaDtoList;
     }
 
@@ -64,7 +62,26 @@ public class PersonaController {
     public GPersonaDto findPersonaById(@PathVariable Integer personaId) {
         GPersonaDto personaDto = null;
         personaDto = personaServices.findOnePersonaById(personaId);
-
         return personaDto;
+    }
+
+    @Operation(summary = "DELETE PERSONA", description = "DELETE PERSONA BY ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "PERSONA DELETE"),
+            @ApiResponse(responseCode = "400", description = "PERSONA DOES NOT EXIST WITH THIS ID",
+                    content = @Content)})
+    @DeleteMapping(value = "delete-one/{personaId}")
+    public void deletePersonaById(@PathVariable Integer personaId) {
+        personaServices.deletePersonaById(personaId);
+    }
+
+    @Operation(summary = "DELETE PERSONA", description = "DELETE PERSONA BY ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "PERSONA DELETE"),
+            @ApiResponse(responseCode = "400", description = "PERSONA DOES NOT EXIST WITH THIS ID",
+                    content = @Content)})
+    @DeleteMapping(value = "delete-one/{personaId}")
+    public void editPersona(@PathVariable Integer personaId){
+
     }
 }
