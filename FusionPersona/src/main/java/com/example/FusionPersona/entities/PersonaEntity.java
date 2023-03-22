@@ -3,6 +3,7 @@ package com.example.FusionPersona.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,4 +23,7 @@ public class PersonaEntity {
     @Lob
     @Column(name = "persona_img")
     private byte[] personaImg;
+
+    @OneToMany(mappedBy = "persona")
+    private List<FusionPersonaEntity> fusionPersonaList;
 }

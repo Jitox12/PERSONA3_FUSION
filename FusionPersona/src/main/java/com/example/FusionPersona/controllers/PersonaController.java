@@ -1,11 +1,11 @@
 package com.example.FusionPersona.controllers;
 
 import com.example.FusionPersona.dto.personaDto.CPersonaDto;
+import com.example.FusionPersona.dto.personaDto.EPersonaDto;
 import com.example.FusionPersona.dto.personaDto.GPersonaDto;
 import com.example.FusionPersona.services.PersonaServices;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,22 +26,19 @@ public class PersonaController {
 
     @Operation(summary = "CREATE PERSONA", description = "CREATED PERSONA WITH DTO")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "PERSONA CREATED",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = CPersonaDto.class))}),
+            @ApiResponse(responseCode = "201", description = "PERSONA CREATED",
+                    content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "400", description = "UNCREATED PERSONA",
                     content = @Content)})
     @PostMapping(value = "create")
-    public String createPersona(@RequestBody CPersonaDto cPersonaDto) {
+    public void createPersona(@RequestBody CPersonaDto cPersonaDto) {
         personaServices.createPersona(cPersonaDto);
-        return "PERSONA CREATED";
     }
 
     @Operation(summary = "FIND PERSONA LIST", description = "FIND ALL PERSONA SAVED IN DB")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "GPERSONADTO LIST",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = CPersonaDto.class))}),
+                    content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "400", description = "DONT EXIST ANY PERSONA",
                     content = @Content)})
     @GetMapping(value = "find-all")
@@ -54,8 +51,7 @@ public class PersonaController {
     @Operation(summary = "FIND A UNIQUE PERSONA", description = "FIND A PERSONA BY ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "GPERSONADTO",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = CPersonaDto.class))}),
+                    content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "400", description = "PERSONA DOES NOT EXIST WITH THIS ID",
                     content = @Content)})
     @GetMapping(value = "find-one/{personaId}")
@@ -75,13 +71,13 @@ public class PersonaController {
         personaServices.deletePersonaById(personaId);
     }
 
-    @Operation(summary = "DELETE PERSONA", description = "DELETE PERSONA BY ID")
+    @Operation(summary = "EDIT PERSONA", description = "EDIT PERSONA BY ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "PERSONA DELETE"),
+            @ApiResponse(responseCode = "200", description = "PERSONA EDITED"),
             @ApiResponse(responseCode = "400", description = "PERSONA DOES NOT EXIST WITH THIS ID",
                     content = @Content)})
-    @DeleteMapping(value = "delete-one/{personaId}")
-    public void editPersona(@PathVariable Integer personaId){
-
+    @PutMapping(value = "edit-persona/{personaId}")
+    public void editPersona(@PathVariable Integer personaId, @RequestBody EPersonaDto personaDto){
+        personaServices.editPersona(personaId, personaDto);
     }
 }

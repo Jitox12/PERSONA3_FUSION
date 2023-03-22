@@ -18,11 +18,13 @@ public class FusionPersonaEntity implements Serializable {
     private static final long serialVersionUID = -6961761447662376254L;
 
     @Id
-    @Column(name="persona_id")
-    private Integer personaId;
-    @Id
     @Column(name = "fusion_id")
     private Integer fusionId;
     @Column(name = "fusion_r")
     private Integer fusionR;
+
+    @Id
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "persona_id", nullable = false)
+    private PersonaEntity persona;
 }

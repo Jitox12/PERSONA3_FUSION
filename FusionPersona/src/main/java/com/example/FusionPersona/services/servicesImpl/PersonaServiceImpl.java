@@ -39,7 +39,7 @@ public class PersonaServiceImpl implements PersonaServices {
         GPersonaDto personaDto = null;
         try {
             persona = personaDao.findOnePersonaById(personaId);
-            personaDto = personaMappers.PersonaEntityToPersonaDto(persona);
+            personaDto = personaMappers.personaEntityToPersonaDto(persona);
             return personaDto;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -54,7 +54,6 @@ public class PersonaServiceImpl implements PersonaServices {
             throw new RuntimeException(e);
         }
     }
-
     @Override
     public List<GPersonaDto> findAllPersonas() {
         List<PersonaEntity> personaList = null;
@@ -62,7 +61,7 @@ public class PersonaServiceImpl implements PersonaServices {
 
         try {
             personaList = personaDao.findAllPersonas();
-            personaDtoList = personaList.stream().map(personaMappers::PersonaEntityToPersonaDto).collect(Collectors.toList());
+            personaDtoList = personaList.stream().map(personaMappers::personaEntityToPersonaDto).collect(Collectors.toList());
             return personaDtoList;
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -11,7 +11,11 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CPersonaDto {
+public class EPersonaDto {
+    @NotBlank
+    @Schema(description = "Persona ID // GET BY PARAMETER",
+            example = "1", required = true)
+    private Integer personaIdDto;
     @NotBlank
     @Size(min = 3, max = 50)
     @Schema(description = "Name of the Persona",

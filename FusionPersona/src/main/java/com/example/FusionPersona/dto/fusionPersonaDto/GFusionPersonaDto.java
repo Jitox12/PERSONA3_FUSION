@@ -1,5 +1,6 @@
 package com.example.FusionPersona.dto.fusionPersonaDto;
 
+import com.example.FusionPersona.entities.PersonaEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -16,7 +17,7 @@ public class GFusionPersonaDto {
     @Size(min = 1)
     @Schema(description = "Persona Id",
             example = "1", required = true)
-    private Integer personaIdDto;
+    private PersonaEntity persona;
 
     @NotBlank
     @Size(min = 1)

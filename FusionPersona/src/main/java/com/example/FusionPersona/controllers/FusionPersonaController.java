@@ -2,18 +2,15 @@ package com.example.FusionPersona.controllers;
 
 import com.example.FusionPersona.dto.fusionPersonaDto.CFusionPersonaDto;
 import com.example.FusionPersona.dto.fusionPersonaDto.GFusionPersonaDto;
-import com.example.FusionPersona.dto.personaDto.CPersonaDto;
 import com.example.FusionPersona.services.FusionPersonaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 @RequestMapping(value = "/api/fusion-persona")
 @Tag(name = "Persona Fusion API", description = "Persona CRU API")
@@ -27,23 +24,29 @@ public class FusionPersonaController {
         this.fusionPersonaService = fusionPersonaService;
     }
 
-    @GetMapping
-    public List<GFusionPersonaDto> findMergePartner(){
-        List<GFusionPersonaDto> fusionPersonaDtoList = null;
-
-        return fusionPersonaDtoList;
-    }
-
-    @Operation(summary = "CREATE FUSION PERSONA",description = "CREATE FUSION PERSONA WITH DTO")
+    @Operation(summary = "CREATE FUSION PERSONA", description = "CREATE FUSION PERSONA WITH DTO")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "PERSONA FUSION CREATED",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = CPersonaDto.class))}),
+                    content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "400", description = "UNCREATED PERSONA FUSION",
                     content = @Content)})
     @PostMapping(value = "/create")
-    public String createFusionPersona(@RequestBody List<CFusionPersonaDto> fusionPersonaDto){
+    public String createFusionPersona(@RequestBody List<CFusionPersonaDto> fusionPersonaDto) {
         fusionPersonaService.createFusionPersona(fusionPersonaDto);
         return "FUSION CREATED";
+    }
+
+    @Operation(summary = "GET FUSION PERSONA", description = "GET FUSION PERSONA WITH DTO")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "FUSION PERSONA LIST BY ID",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "400", description = "FUSION PERSONA DOES NOT EXIST WHIT PERSONA ID",
+                    content = @Content)})
+    @GetMapping(value = "/find-by-persona-id/{personaId}")
+    public List<GFusionPersonaDto> findFusionPersonaByPersonaId(@PathVariable Integer personaId) {
+        List<GFusionPersonaDto> gFusionPersonaDto = null;
+
+        gFusionPersonaDto = fusionPersonaService.findFusionPersonaByPersonaId(personaId);
+        return gFusionPersonaDto;
     }
 }

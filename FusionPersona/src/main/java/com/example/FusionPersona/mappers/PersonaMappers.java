@@ -13,6 +13,6 @@ public interface PersonaMappers {
     @Mapping(source = "personaId", target = "personaIdDto")
     @Mapping(source = "personaName", target = "personaNameDto")
     @Mapping(source = "personaImg", target = "personaImgDto")
-    GPersonaDto PersonaEntityToPersonaDto(PersonaEntity persona);
+    GPersonaDto personaEntityToPersonaDto(PersonaEntity persona);
 
 }

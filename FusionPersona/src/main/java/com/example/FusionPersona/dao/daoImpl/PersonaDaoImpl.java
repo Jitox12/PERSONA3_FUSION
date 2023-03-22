@@ -28,6 +28,7 @@ public class PersonaDaoImpl implements PersonaDao {
                 .personaName(personaDto.getPersonaNameDto())
                 .personaImg(img)
                 .build();
+        personaRepository.findPersonas(10);
 
         personaRepository.save(persona);
     }
@@ -36,16 +37,18 @@ public class PersonaDaoImpl implements PersonaDao {
     public PersonaEntity findOnePersonaById(Integer personaId) {
         PersonaEntity persona = null;
         persona = personaRepository.findByPersonaId(personaId);
+        List<PersonaEntity> personaPrueba = null;
         return persona;
     }
 
     @Override
     public List<PersonaEntity> findAllPersonas() {
-        List<PersonaEntity> personaList= null;
+        List<PersonaEntity> personaList = null;
         personaList = personaRepository.findAll();
 
         return personaList;
     }
+
     @Override
     public void deletePersonaById(Integer personaId) {
         personaRepository.deleteById(personaId);
@@ -60,6 +63,7 @@ public class PersonaDaoImpl implements PersonaDao {
                 .personaName(ePersonaDto.getPersonaNameDto())
                 .personaImg(img)
                 .build();
+
 
         personaRepository.save(persona);
     }

@@ -25,11 +25,18 @@ public class FusionPersonaDaoImpl implements FusionPersonaDao {
 
         fusionPersonaDto.forEach((CFusionPersonaDto fusionPersona) -> {
             fusionPersonaList.add(FusionPersonaEntity.builder()
-                    .personaId(fusionPersona.getPersonaIdDto())
+                    .persona(fusionPersona.getPersona())
                     .fusionId(fusionPersona.getFusionIdDto())
                     .fusionR(fusionPersona.getFusionRDto())
                     .build());
         });
         fusionPersonaRepository.saveAll(fusionPersonaList);
+    }
+
+    @Override
+    public List<FusionPersonaEntity> findFusionPersonaByPersonaId(Integer personaId) {
+        List<FusionPersonaEntity> fusionPersonaList = null;
+
+        return fusionPersonaList;
     }
 }
