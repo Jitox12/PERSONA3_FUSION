@@ -5,8 +5,10 @@ import com.example.FusionPersona.dto.personaDto.CPersonaDto;
 import com.example.FusionPersona.dto.personaDto.EPersonaDto;
 import com.example.FusionPersona.dto.personaDto.GPersonaDto;
 import com.example.FusionPersona.entities.PersonaEntity;
+import com.example.FusionPersona.exception.exceptions.NotFoundException;
 import com.example.FusionPersona.mappers.PersonaMappers;
 import com.example.FusionPersona.services.PersonaServices;
+import com.example.FusionPersona.utils.FirstKey;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -27,6 +29,9 @@ public class PersonaServiceImpl implements PersonaServices {
     @Override
     public void createPersona(CPersonaDto personaDto) {
         try {
+            String upperName = FirstKey.UpperCase(personaDto.getPersonaNameDto());
+            personaDto.setPersonaNameDto(upperName);
+
             personaDao.createPersona(personaDto);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -35,14 +40,28 @@ public class PersonaServiceImpl implements PersonaServices {
 
     @Override
     public GPersonaDto findOnePersonaById(Integer personaId) {
-        PersonaEntity persona = null;
-        GPersonaDto personaDto = null;
+        PersonaEntity persona;
+        GPersonaDto personaDto;
         try {
             persona = personaDao.findOnePersonaById(personaId);
             personaDto = personaMappers.personaEntityToPersonaDto(persona);
             return personaDto;
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public GPersonaDto findPersonaByName(String personaName) {
+        PersonaEntity persona;
+        GPersonaDto personaDto;
+        try {
+            persona = personaDao.findPersonaByName(personaName);
+            personaDto = personaMappers.personaEntityToPersonaDto(persona);
+
+            return personaDto;
+        } catch (IOException e) {
+            throw new NotFoundException("Persona by personaName: ".concat(personaName));
         }
     }
 
@@ -54,6 +73,7 @@ public class PersonaServiceImpl implements PersonaServices {
             throw new RuntimeException(e);
         }
     }
+
     @Override
     public List<GPersonaDto> findAllPersonas() {
         List<PersonaEntity> personaList = null;
@@ -73,6 +93,15 @@ public class PersonaServiceImpl implements PersonaServices {
         try {
             personaDto.setPersonaIdDto(personaId);
             personaDao.editPersona(personaDto);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void deletePersonaByName(String personaName) {
+        try {
+            personaDao.deletePersonaByName(personaName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

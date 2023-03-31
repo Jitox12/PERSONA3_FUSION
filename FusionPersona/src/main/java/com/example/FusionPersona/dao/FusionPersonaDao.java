@@ -1,8 +1,6 @@
 package com.example.FusionPersona.dao;
 
 import com.example.FusionPersona.dto.fusionPersonaDto.CFusionPersonaDto;
-import com.example.FusionPersona.dto.fusionPersonaDto.GFusionPersonaDto;
-import com.example.FusionPersona.dto.personaDto.CPersonaDto;
 import com.example.FusionPersona.entities.FusionPersonaEntity;
 
 import java.io.IOException;

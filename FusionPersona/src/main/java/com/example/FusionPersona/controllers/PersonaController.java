@@ -9,8 +9,11 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Tag(name = "Persona's API", description = "Persona CRUD API")
@@ -31,8 +34,10 @@ public class PersonaController {
             @ApiResponse(responseCode = "400", description = "UNCREATED PERSONA",
                     content = @Content)})
     @PostMapping(value = "create")
-    public void createPersona(@RequestBody CPersonaDto cPersonaDto) {
+    public ResponseEntity<String> createPersona(@Valid @RequestBody CPersonaDto cPersonaDto) {
         personaServices.createPersona(cPersonaDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body("PERSONA CREATED");
     }
 
     @Operation(summary = "FIND PERSONA LIST", description = "FIND ALL PERSONA SAVED IN DB")
@@ -42,10 +47,11 @@ public class PersonaController {
             @ApiResponse(responseCode = "400", description = "DONT EXIST ANY PERSONA",
                     content = @Content)})
     @GetMapping(value = "find-all")
-    public List<GPersonaDto> findAllPersonas() {
-        List<GPersonaDto> personaDtoList = null;
+    public ResponseEntity<List<GPersonaDto>> findAllPersonas() {
+        List<GPersonaDto> personaDtoList;
         personaDtoList = personaServices.findAllPersonas();
-        return personaDtoList;
+
+        return ResponseEntity.status(HttpStatus.OK).body(personaDtoList);
     }
 
     @Operation(summary = "FIND A UNIQUE PERSONA", description = "FIND A PERSONA BY ID")
@@ -55,10 +61,23 @@ public class PersonaController {
             @ApiResponse(responseCode = "400", description = "PERSONA DOES NOT EXIST WITH THIS ID",
                     content = @Content)})
     @GetMapping(value = "find-one/{personaId}")
-    public GPersonaDto findPersonaById(@PathVariable Integer personaId) {
-        GPersonaDto personaDto = null;
+    public ResponseEntity<GPersonaDto> findPersonaById(@PathVariable Integer personaId) {
+        GPersonaDto personaDto;
         personaDto = personaServices.findOnePersonaById(personaId);
-        return personaDto;
+        return ResponseEntity.status(HttpStatus.OK).body(personaDto);
+    }
+
+    @Operation(summary = "FIND A PERSONA", description = "EDIT PERSONA BY NAME")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "PERSONA EDITED"),
+            @ApiResponse(responseCode = "400", description = "PERSONA DOES NOT EXIST WITH THIS NAME",
+                    content = @Content)})
+    @GetMapping(value = "find-one-by-name/{personaName}")
+    public ResponseEntity<GPersonaDto> findPersonaByName(@PathVariable String personaName) {
+        GPersonaDto personaDto;
+        personaDto = personaServices.findPersonaByName(personaName);
+
+        return ResponseEntity.status(HttpStatus.OK).body(personaDto);
     }
 
     @Operation(summary = "DELETE PERSONA", description = "DELETE PERSONA BY ID")
@@ -67,9 +86,24 @@ public class PersonaController {
             @ApiResponse(responseCode = "400", description = "PERSONA DOES NOT EXIST WITH THIS ID",
                     content = @Content)})
     @DeleteMapping(value = "delete-one/{personaId}")
-    public void deletePersonaById(@PathVariable Integer personaId) {
+    public ResponseEntity<String> deletePersonaById(@PathVariable Integer personaId) {
         personaServices.deletePersonaById(personaId);
+
+        return ResponseEntity.status(HttpStatus.OK).body("PERSONA ELIMINATED");
     }
+
+    @Operation(summary = "DELETE PERSONA", description = "DELETE PERSONA BY NAME")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "PERSONA DELETE"),
+            @ApiResponse(responseCode = "400", description = "PERSONA DOES NOT EXIST WITH THIS NAME",
+                    content = @Content)})
+    @DeleteMapping(value = "delete-one/{personaName}")
+    public ResponseEntity<String> deletePersonaByName(@PathVariable String personaName) {
+        personaServices.deletePersonaByName(personaName);
+
+        return ResponseEntity.status(HttpStatus.OK).body("PERSONA ELIMINATED");
+    }
+
 
     @Operation(summary = "EDIT PERSONA", description = "EDIT PERSONA BY ID")
     @ApiResponses(value = {
@@ -77,7 +111,9 @@ public class PersonaController {
             @ApiResponse(responseCode = "400", description = "PERSONA DOES NOT EXIST WITH THIS ID",
                     content = @Content)})
     @PutMapping(value = "edit-persona/{personaId}")
-    public void editPersona(@PathVariable Integer personaId, @RequestBody EPersonaDto personaDto){
+    public ResponseEntity<String> editPersona(@PathVariable Integer personaId, @RequestBody EPersonaDto personaDto) {
         personaServices.editPersona(personaId, personaDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body("PERSONA EDITED");
     }
 }

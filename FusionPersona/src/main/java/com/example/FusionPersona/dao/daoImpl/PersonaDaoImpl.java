@@ -4,12 +4,18 @@ import com.example.FusionPersona.dao.PersonaDao;
 import com.example.FusionPersona.dto.personaDto.CPersonaDto;
 import com.example.FusionPersona.dto.personaDto.EPersonaDto;
 import com.example.FusionPersona.entities.PersonaEntity;
+import com.example.FusionPersona.exception.exceptions.NotFoundException;
 import com.example.FusionPersona.repositories.PersonaRepository;
 import org.springframework.stereotype.Component;
 
+import javax.swing.text.html.Option;
+import javax.transaction.Transactional;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class PersonaDaoImpl implements PersonaDao {
@@ -20,50 +26,68 @@ public class PersonaDaoImpl implements PersonaDao {
         this.personaRepository = personaRepository;
     }
 
+    @Transactional
     @Override
     public void createPersona(CPersonaDto personaDto) throws IOException {
-        byte[] img = personaDto.getPersonaImgDto().getBytes(StandardCharsets.UTF_8);
 
         PersonaEntity persona = PersonaEntity.builder()
                 .personaName(personaDto.getPersonaNameDto())
-                .personaImg(img)
+                .personaImg(personaDto.getPersonaImgDto())
                 .build();
-        personaRepository.findPersonas(10);
 
         personaRepository.save(persona);
     }
 
     @Override
     public PersonaEntity findOnePersonaById(Integer personaId) {
-        PersonaEntity persona = null;
-        persona = personaRepository.findByPersonaId(personaId);
-        List<PersonaEntity> personaPrueba = null;
+        PersonaEntity persona ;
+
+        persona = personaRepository
+                .findByPersonaId(personaId)
+                .orElseThrow(()-> new RuntimeException("Errorcito"));
+
         return persona;
     }
 
     @Override
     public List<PersonaEntity> findAllPersonas() {
-        List<PersonaEntity> personaList = null;
-        personaList = personaRepository.findAll();
+        List<PersonaEntity> personaList = personaRepository.findAll()
+                                .stream()
+                                .filter(Objects::nonNull)
+                                .collect(Collectors.toList());
+        if(personaList.isEmpty()){
+            throw new NotFoundException("Persona");
+        }
 
         return personaList;
     }
 
     @Override
+    public PersonaEntity findPersonaByName(String personaName) throws IOException {
+        PersonaEntity persona = personaRepository.findByPersonaName(personaName)
+                .orElseThrow(()->new RuntimeException("soy un error"));
+
+        return persona;
+    }
+
+    @Override
+    public void deletePersonaByName(String personaName) throws IOException {
+        personaRepository.deleteByPersonaName(personaName);
+    }
+    @Transactional
+    @Override
     public void deletePersonaById(Integer personaId) {
         personaRepository.deleteById(personaId);
     }
 
+    @Transactional
     @Override
     public void editPersona(EPersonaDto ePersonaDto) {
-        byte[] img = ePersonaDto.getPersonaImgDto().getBytes(StandardCharsets.UTF_8);
-
         PersonaEntity persona = PersonaEntity.builder()
                 .personaId(ePersonaDto.getPersonaIdDto())
                 .personaName(ePersonaDto.getPersonaNameDto())
-                .personaImg(img)
+                .personaImg(ePersonaDto.getPersonaImgDto())
                 .build();
-
 
         personaRepository.save(persona);
     }

@@ -15,14 +15,13 @@ import java.util.List;
 public class PersonaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "persona_id")
+    @Column(name = "persona_id", unique = true)
     private Integer personaId;
-
-    @Column(name = "persona_name")
+    @Column(name = "persona_name",unique = true, nullable = false)
     private String personaName;
     @Lob
-    @Column(name = "persona_img")
-    private byte[] personaImg;
+    @Column(name = "persona_img", nullable = false)
+    private String personaImg;
 
     @OneToMany(mappedBy = "persona")
     private List<FusionPersonaEntity> fusionPersonaList;

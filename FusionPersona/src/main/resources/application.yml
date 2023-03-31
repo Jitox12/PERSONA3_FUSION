@@ -1,4 +1,10 @@
 spring:
+  server:
+    error:
+      include-message: always
+      include-binding-errors: always
+      include-stacktrace: on_trace_param
+      include-exception: false
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
@@ -10,3 +16,4 @@ spring:
     hibernate:
       ddl-auto: update
 logging.level.root: DEBUG
+

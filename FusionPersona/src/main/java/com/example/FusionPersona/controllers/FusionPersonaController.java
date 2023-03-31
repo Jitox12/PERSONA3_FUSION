@@ -1,13 +1,15 @@
 package com.example.FusionPersona.controllers;
 
-import com.example.FusionPersona.dto.fusionPersonaDto.CFusionPersonaDto;
 import com.example.FusionPersona.dto.fusionPersonaDto.GFusionPersonaDto;
+import com.example.FusionPersona.dto.fusionPersonaDto.RFusionPersonaDto;
 import com.example.FusionPersona.services.FusionPersonaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,9 +33,9 @@ public class FusionPersonaController {
             @ApiResponse(responseCode = "400", description = "UNCREATED PERSONA FUSION",
                     content = @Content)})
     @PostMapping(value = "/create")
-    public String createFusionPersona(@RequestBody List<CFusionPersonaDto> fusionPersonaDto) {
+    public ResponseEntity<String> createFusionPersona(@RequestBody List<RFusionPersonaDto> fusionPersonaDto) {
         fusionPersonaService.createFusionPersona(fusionPersonaDto);
-        return "FUSION CREATED";
+        return ResponseEntity.status(HttpStatus.CREATED).body("Merged Persona");
     }
 
     @Operation(summary = "GET FUSION PERSONA", description = "GET FUSION PERSONA WITH DTO")
@@ -43,10 +45,10 @@ public class FusionPersonaController {
             @ApiResponse(responseCode = "400", description = "FUSION PERSONA DOES NOT EXIST WHIT PERSONA ID",
                     content = @Content)})
     @GetMapping(value = "/find-by-persona-id/{personaId}")
-    public List<GFusionPersonaDto> findFusionPersonaByPersonaId(@PathVariable Integer personaId) {
+    public ResponseEntity<List<GFusionPersonaDto>> findFusionPersonaByPersonaId(@PathVariable Integer personaId) {
         List<GFusionPersonaDto> gFusionPersonaDto = null;
 
         gFusionPersonaDto = fusionPersonaService.findFusionPersonaByPersonaId(personaId);
-        return gFusionPersonaDto;
+        return ResponseEntity.status(HttpStatus.OK).body(gFusionPersonaDto);
     }
 }
